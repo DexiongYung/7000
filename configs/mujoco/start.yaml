@@ -1,0 +1,7 @@
+id: start
+task: Ant-v3
+screen_height: 100
+screen_width: 100
+train:
+  seed: 1234
+  steps:

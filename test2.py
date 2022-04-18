@@ -1,15 +1,21 @@
 import gym
-from gym.spaces import Box
-import numpy as np
 from PIL import Image as im
+from models.PPO_model import PPO_model
+from utils.tensor_utils import process_obs
 
-env = gym.make('CarRacing-v1')
+WIDTH = 64
+HEIGHT = WIDTH
+
+env = gym.make('Hopper-v3')
 action_space = env.action_space
-env.observation_space = Box(low=0, high=255, shape=(3,64,64), dtype=env.observation_space.dtype)
-
 env.reset()
-random_action = env.action_space.sample()
-obs, reward, done, info = env.step(random_action)
-transposed_arr = np.transpose(obs, (2,0,1))
-im.fromarray(transposed_arr, 'RGB').show()
-print('')
+rgb_obs = env.render(mode='rgb_array', width=WIDTH, height=HEIGHT)
+model = PPO_model(input_width=WIDTH, input_height=HEIGHT, action_space=action_space, is_discrete=False)
+
+for i in range(1):
+    random_action = env.action_space.sample()
+    _, reward, done, info = env.step(random_action)
+    rgb_obs = env.render(mode='rgb_array', width=WIDTH, height=HEIGHT)
+    transformed_obs = process_obs(obs=rgb_obs, model=model)
+    pi, v = model.forward(transformed_obs)
+    print('')
