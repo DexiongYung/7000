@@ -13,7 +13,7 @@ class PPO_model(torch.nn.Module):
         self.preprocessor = BackBoneNN(input_width=input_width, input_height=input_height)
 
         if is_discrete:
-            # TODO!!!: Haven't dealt with discrete action spaces yet have see what's appropriate
+            # TODO!!!: Haven't dealt with discrete action spaces yet have see what's appropriate for adapting to "action_space"
             self.logits_net = torch.nn.Sequential(torch.nn.Linear(in_features=self.preprocessor.out_len, out_features=len(action_space)))
         else:
             self.action_len = prod(self.action_space._shape)

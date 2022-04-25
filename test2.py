@@ -1,7 +1,7 @@
 import gym
 from PIL import Image as im
 from models.PPO_model import PPO_model
-from utils.tensor_utils import process_obs
+from utils.obs_processor import process_obs
 
 WIDTH = 64
 HEIGHT = WIDTH
