@@ -21,15 +21,9 @@ def get_config():
     args = parser.parse_args()
 
     with open(args.config) as fp:
-        cfg = yaml.load(fp)
+        cfg = yaml.load(fp, Loader=yaml.FullLoader)
     
     if not cfg['id']:
         raise ValueError('"id" should not be none in config yaml')
-
-    return cfg
-
-def setup_logger_and_config():
-    cfg = get_config()
-    setup_logger(cfg['id'])
 
     return cfg

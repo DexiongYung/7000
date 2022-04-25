@@ -1,13 +1,11 @@
 import torch
 import logging
 from models.PPO_model import PPO_model
-from utils.logger_and_config import setup_logger_and_config
+from utils.logger_and_config import get_config, setup_logger
 from envs.SB3MuJoCo import SB3MuJoCo
 from stable_baselines3.common.env_util import make_vec_env
 
 def train(cfg):
-    rgb_width = cfg['screen_width']
-    rgb_height = cfg['screen_height']
     seed = cfg['train']['seed']
     num_mini_batch = cfg['train']['num_mini_batch']
     num_workers = cfg['train']['num_workers']
@@ -21,5 +19,7 @@ def train(cfg):
 
 
 if __name__ == '__main__':
-    cfg = setup_logger_and_config()
+    cfg = get_config()
+    # !!!TODO: Add back in logger
+    # setup_logger(cfg['id'])
     train(cfg)
