@@ -45,28 +45,6 @@ def get_config():
     return cfg
 
 
-def process_obs(obs: torch.tensor):
-    if not isinstance(obs, torch.Tensor):
-        try:
-            obs = torch.tensor(obs)
-        except ValueError as e:
-            obs = torch.tensor(obs.copy())
-
-    err_sz = "obs should be of dimension Batch x Num Channel x Height x Width."
-    if len(obs.shape) == 3:
-        obs = torch.unsqueeze(obs, 0)
-    elif len(obs.shape) != 4:
-        raise ValueError(f"{err_sz} Got obs of shape length = {len(obs.shape)}.")
-
-    if obs.shape[1] != 3:
-        if obs.shape[3] == 3:
-            obs = torch.transpose(obs, 1, 3)
-        else:
-            raise ValueError("None of the expected dimensions of: [1,3] were of size 3")
-
-    return obs
-
-
 def init(module, weight_init, bias_init, gain=1):
     weight_init(module.weight.data, gain=gain)
     bias_init(module.bias.data)

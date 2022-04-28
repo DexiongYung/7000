@@ -1,13 +1,12 @@
 import os
 import json
 import time
-from imageio import save
 import torch
 import numpy as np
 from storage import RolloutStorage
 from model import Policy
 from env import get_env
-from utils import get_config, get_logger, process_obs
+from utils import get_config, get_logger
 import algorithm as algo
 from collections import deque
 
@@ -26,7 +25,7 @@ def train(cfg):
     num_steps = cfg["train"]["num_steps"]
     algo_params = cfg["train"]["algorithm_params"]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    log_interval = cfg['train']['log_interval']
+    log_interval = cfg["train"]["log_interval"]
     save_interval = cfg["train"]["save_interval"]
     save_path = os.path.join("./checkpoints", cfg["algorithm"], cfg["id"])
 
@@ -118,10 +117,10 @@ def train(cfg):
 
             if j == 0:
                 with open(os.path.join(save_path, "config.json"), "w") as output:
-                    logger.info(f'Saving config.yaml...')
+                    logger.info(f"Saving config.yaml...")
                     json.dump(cfg, output)
-            
-            logger.info(f'num update: {j}. Saving checkpoint...')
+
+            logger.info(f"num update: {j}. Saving checkpoint...")
             torch.save(
                 {
                     "epoch": j,

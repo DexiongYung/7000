@@ -78,17 +78,16 @@ class RolloutStorage(object):
         self.masks[0].copy_(self.masks[-1])
         self.bad_masks[0].copy_(self.bad_masks[-1])
 
-    def compute_returns(
-        self, next_value, gamma, gae_lambda
-    ):
+    def compute_returns(self, next_value, gamma, gae_lambda):
         self.value_preds[-1] = next_value
         gae = 0
         for step in reversed(range(self.rewards.size(0))):
-            delta = self.rewards[step] + gamma * self.value_preds[
-                step + 1] * self.masks[step +
-                                        1] - self.value_preds[step]
-            gae = delta + gamma * gae_lambda * self.masks[step +
-                                                            1] * gae
+            delta = (
+                self.rewards[step]
+                + gamma * self.value_preds[step + 1] * self.masks[step + 1]
+                - self.value_preds[step]
+            )
+            gae = delta + gamma * gae_lambda * self.masks[step + 1] * gae
             self.returns[step] = gae + self.value_preds[step]
 
     def feed_forward_generator(
