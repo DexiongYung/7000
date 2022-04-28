@@ -5,6 +5,9 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1=main
   - _openmp_mutex=4.5=1_gnu
+  - appdirs=1.4.4=pyhd3eb1b0_0
+  - attrs=21.4.0=pyhd3eb1b0_0
+  - black=19.10b0=py_0
   - ca-certificates=2021.10.8=ha878542_0
   - certifi=2021.10.8=py39hf3d152e_2
   - glew=2.1.0=h9c3ff4c_2
@@ -15,18 +18,24 @@ dependencies:
   - libgomp=9.3.0=h5101ec6_17
   - libstdcxx-ng=9.3.0=hd4cf53a_17
   - libxcb=1.13=h7f98852_1003
+  - mypy_extensions=0.4.3=py39h06a4308_1
   - ncurses=6.3=h7f8727e_2
   - openssl=1.1.1n=h7f8727e_0
+  - pathspec=0.7.0=py_0
   - pcre=8.45=h295c915_0
   - pip=21.2.4=py39h06a4308_0
   - pthread-stubs=0.4=h36c2ea0_1001
   - python=3.9.12=h12debd9_0
   - python_abi=3.9=2_cp39
   - readline=8.1.2=h7f8727e_1
+  - regex=2022.3.15=py39h7f8727e_0
   - setuptools=58.0.4=py39h06a4308_0
   - sqlite=3.38.2=hc218d9a_0
   - swig=4.0.2=h295c915_4
   - tk=8.6.11=h1ccaba5_0
+  - toml=0.10.2=pyhd3eb1b0_0
+  - typed-ast=1.4.3=py39h7f8727e_1
+  - typing_extensions=4.1.1=pyh06a4308_0
   - tzdata=2022a=hda174b7_0
   - wheel=0.37.1=pyhd3eb1b0_0
   - xorg-kbproto=1.0.7=h7f98852_1002
@@ -37,6 +46,7 @@ dependencies:
   - xorg-xextproto=7.3.0=h7f98852_1002
   - xorg-xproto=7.0.31=h7f98852_1007
   - xz=5.2.5=h7b6447c_0
+  - zipp=3.8.0=pyhd8ed1ab_0
   - zlib=1.2.11=h7f8727e_4
   - pip:
     - absl-py==1.0.0
@@ -107,8 +117,6 @@ dependencies:
     - torch==1.11.0
     - torchvision==0.12.0
     - tqdm==4.64.0
-    - typing-extensions==4.1.1
     - urllib3==1.26.9
     - werkzeug==2.1.1
-    - zipp==3.8.0
 prefix: /home/dyung6/anaconda3/envs/7000

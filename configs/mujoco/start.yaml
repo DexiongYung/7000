@@ -1,14 +1,28 @@
 id: start
 task: Ant-v3
+num_frame_stack: 4
 screen_height: 100
 screen_width: 100
+algorithm: PPO
 train:
-  epochs: 4
+  save_interval: 5000
+  log_interval: 2500
   seed: 1234
-  num_workers: 2
-  worker_steps: 128
-  num_mini_batch: 4
-  objective:
-    name: PPO
+  num_workers: 8
+  num_steps: 5
+  num_env_steps: 1000000000
+  compute_returns:
+    gae_lambda: 0.95
     gamma: 0.99
-    lambda: 0.95
+  algorithm_params:
+    clip_param: 0.2
+    ppo_epoch: 4
+    num_mini_batch: 4
+    value_loss_coef: 0.5
+    entropy_coef: 0.01
+    lr: 0.0007
+    eps: 0.00001
+    max_grad_norm: 0.5
+    use_clipped_value_loss: True
+  logs:
+    add_date: False
