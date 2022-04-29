@@ -141,7 +141,7 @@ def train(cfg):
             writer.add_scalar(tag="Actionn Loss At Num Step", scalar_value=action_loss, global_step=total_num_steps)
             logger.info(f'Step:{total_num_steps}/{num_updates*num_workers*num_steps}, mean reward: {mean_reward}, median reward: {median_reward}')
     
-    logger.info(f'Done training at time: {end - start}')
+    logger.info(f'Total Time To Complete: {end - start}')
     writer.close()
 
 
