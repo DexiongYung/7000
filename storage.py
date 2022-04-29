@@ -19,6 +19,7 @@ class RolloutStorage(object):
         self.recurrent_hidden_states = torch.zeros(
             num_steps + 1, num_processes, recurrent_hidden_state_size
         )
+        # Don't store reward for very last step
         self.rewards = torch.zeros(num_steps, num_processes, 1)
         self.value_preds = torch.zeros(num_steps + 1, num_processes, 1)
         self.returns = torch.zeros(num_steps + 1, num_processes, 1)
@@ -80,8 +81,10 @@ class RolloutStorage(object):
 
     def compute_returns(self, next_value, gamma, gae_lambda):
         self.value_preds[-1] = next_value
+        # Generalized advantage estimate
         gae = 0
         for step in reversed(range(self.rewards.size(0))):
+            # Delta: Reward + t+1 value estimate - value estimate of t
             delta = (
                 self.rewards[step]
                 + gamma * self.value_preds[step + 1] * self.masks[step + 1]

@@ -9,25 +9,28 @@ from env import get_env
 from utils import get_config, get_logger
 import algorithm as algo
 from collections import deque
+from torch.utils.tensorboard import SummaryWriter
 
 
 def train(cfg):
+    seed = cfg['id']['seed']
     # Setup logger
     logger = get_logger(
         name=cfg["id"],
-        seed=cfg["train"]["seed"],
+        seed=seed,
         add_date=cfg["train"]["logs"]["add_date"],
     )
     logger.info(cfg)
+    writer = SummaryWriter(log_dir=os.path.join("./tb_logs", cfg["algorithm"], cfg["id"]))
 
     # Parse hyperparams
     num_workers = cfg["train"]["num_workers"]
     num_steps = cfg["train"]["num_steps"]
     algo_params = cfg["train"]["algorithm_params"]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    log_interval = cfg["train"]["log_interval"]
+    tb_log_interval = cfg["train"]["tb_log_interval"]
     save_interval = cfg["train"]["save_interval"]
-    save_path = os.path.join("./checkpoints", cfg["algorithm"], cfg["id"])
+    save_path = os.path.join("./checkpoints", cfg["algorithm"], cfg["id"], seed)
 
     envs = get_env(cfg=cfg, num_workers=num_workers, device=device)
 
@@ -117,7 +120,7 @@ def train(cfg):
 
             if j == 0:
                 with open(os.path.join(save_path, "config.json"), "w") as output:
-                    logger.info(f"Saving config.yaml...")
+                    logger.info(f"num update: {j}. Saving config.yaml...")
                     json.dump(cfg, output)
 
             logger.info(f"num update: {j}. Saving checkpoint...")
@@ -127,29 +130,27 @@ def train(cfg):
                     "model_state_dict": agent.actor_critic.state_dict(),
                     "optimizer_state_dict": agent.optimizer.state_dict(),
                 },
-                os.path.join(save_path, "checkpoint.pt"),
+                os.path.join(save_path, "checkpoint.pt")
             )
 
-        if j % log_interval == 0 and len(episode_rewards) > 1:
+        if j % tb_log_interval == 0 and len(episode_rewards) > 1 or j == num_updates - 1:
             total_num_steps = (j + 1) * num_workers * algo_params.num_steps
             end = time.time()
-            print(
-                "Updates {}, num timesteps {}, FPS {} \n Last {} training episodes: mean/median reward {:.1f}/{:.1f}, min/max reward {:.1f}/{:.1f}\n".format(
-                    j,
-                    total_num_steps,
-                    int(total_num_steps / (end - start)),
-                    len(episode_rewards),
-                    np.mean(episode_rewards),
-                    np.median(episode_rewards),
-                    np.min(episode_rewards),
-                    np.max(episode_rewards),
-                    dist_entropy,
-                    value_loss,
-                    action_loss,
-                )
-            )
+            writer.add_scalar(tag='FPS', scalar_value=int(total_num_steps / (end - start)), global_step=total_num_steps)
+            writer.add_scalar(tag="Mean Reward", scalar_value=np.mean(episode_rewards), global_step=total_num_steps)
+            writer.add_scalar(tag="Median Reward", scalar_value=np.median(episode_rewards), global_step=total_num_steps)
+            writer.add_scalar(tag="Distribution Entropy At Num Step", scalar_value=dist_entropy, global_step=total_num_steps)
+            writer.add_scalar(tag="Value Loss At Num Step", scalar_value=value_loss, global_step=total_num_steps)
+            writer.add_scalar(tag="Actionn Loss At Num Step", scalar_value=action_loss, global_step=total_num_steps)
+
+    writer.close()
 
 
 if __name__ == "__main__":
     cfg = get_config()
-    train(cfg)
+
+    if cfg['device_id'] is not None:
+        with torch.cuda.device(cfg['device_id']):
+            train(cfg)
+    else:
+        train(cfg)

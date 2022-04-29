@@ -5,76 +5,38 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1=main
   - _openmp_mutex=4.5=1_gnu
-  - absl-py=1.0.0=pyhd8ed1ab_0
-  - aiohttp=3.7.0=py39h07f9747_0
-  - appdirs=1.4.4=pyhd3eb1b0_0
-  - async-timeout=3.0.1=py_1000
-  - attrs=21.4.0=pyhd3eb1b0_0
+  - appdirs=1.4.4=pyh9f0ad1d_0
+  - attrs=21.4.0=pyhd8ed1ab_0
   - black=19.10b0=py_0
-  - blinker=1.4=py_1
-  - brotlipy=0.7.0=py39h3811e60_1001
-  - c-ares=1.17.1=h7f98852_1
   - ca-certificates=2021.10.8=ha878542_0
-  - cachetools=5.0.0=pyhd8ed1ab_0
   - certifi=2021.10.8=py39hf3d152e_2
-  - chardet=3.0.4=py39h079e4ff_1008
-  - charset-normalizer=2.0.12=pyhd8ed1ab_0
-  - cryptography=35.0.0=py39hbca0aa6_0
+  - click=8.1.2=py39hf3d152e_0
   - glew=2.1.0=h9c3ff4c_2
-  - google-auth=2.6.6=pyh6c4a22f_0
-  - google-auth-oauthlib=0.4.6=pyhd8ed1ab_0
-  - idna=3.3=pyhd8ed1ab_0
-  - importlib-metadata=4.11.3=py39hf3d152e_1
   - ld_impl_linux-64=2.35.1=h7274673_9
-  - libblas=3.9.0=11_linux64_openblas
-  - libcblas=3.9.0=11_linux64_openblas
   - libffi=3.3=he6710b0_2
   - libgcc-ng=9.3.0=h5101ec6_17
-  - libgfortran-ng=11.2.0=h69a702a_16
-  - libgfortran5=11.2.0=h5c6108e_16
   - libglu=9.0.0=he1b5a44_1001
   - libgomp=9.3.0=h5101ec6_17
-  - liblapack=3.9.0=11_linux64_openblas
-  - libopenblas=0.3.17=pthreads_h8fe5266_1
-  - libprotobuf=3.17.2=h780b84a_1
   - libstdcxx-ng=9.3.0=hd4cf53a_17
   - libxcb=1.13=h7f98852_1003
-  - markdown=3.3.6=pyhd8ed1ab_0
-  - multidict=5.1.0=py39h3811e60_1
-  - mypy_extensions=0.4.3=py39h06a4308_1
+  - mypy_extensions=0.4.3=py39hf3d152e_5
   - ncurses=6.3=h7f8727e_2
-  - oauthlib=3.2.0=pyhd8ed1ab_0
   - openssl=1.1.1n=h7f8727e_0
-  - pathspec=0.7.0=py_0
+  - pathspec=0.9.0=pyhd8ed1ab_0
   - pcre=8.45=h295c915_0
   - pip=21.2.4=py39h06a4308_0
   - pthread-stubs=0.4=h36c2ea0_1001
-  - pyasn1=0.4.8=py_0
-  - pycparser=2.21=pyhd8ed1ab_0
-  - pyjwt=2.3.0=pyhd8ed1ab_1
-  - pyopenssl=22.0.0=pyhd8ed1ab_0
-  - pysocks=1.7.1=py39hf3d152e_5
   - python=3.9.12=h12debd9_0
   - python_abi=3.9=2_cp39
-  - pyu2f=0.1.5=pyhd8ed1ab_0
   - readline=8.1.2=h7f8727e_1
-  - regex=2022.3.15=py39h7f8727e_0
-  - requests=2.27.1=pyhd8ed1ab_0
-  - requests-oauthlib=1.3.1=pyhd8ed1ab_0
-  - rsa=4.8=pyhd8ed1ab_0
+  - regex=2021.8.3=py39h3811e60_0
   - setuptools=58.0.4=py39h06a4308_0
-  - six=1.16.0=pyh6c4a22f_0
   - sqlite=3.38.2=hc218d9a_0
   - swig=4.0.2=h295c915_4
-  - tensorboard=2.8.0=pyhd8ed1ab_1
-  - tensorboard-plugin-wit=1.8.1=pyhd8ed1ab_0
   - tk=8.6.11=h1ccaba5_0
-  - toml=0.10.2=pyhd3eb1b0_0
-  - typed-ast=1.4.3=py39h7f8727e_1
-  - typing_extensions=4.1.1=pyh06a4308_0
+  - toml=0.10.2=pyhd8ed1ab_0
+  - typed-ast=1.4.3=py39h3811e60_0
   - tzdata=2022a=hda174b7_0
-  - urllib3=1.26.9=pyhd8ed1ab_0
-  - werkzeug=2.1.1=pyhd8ed1ab_0
   - wheel=0.37.1=pyhd3eb1b0_0
   - xorg-kbproto=1.0.7=h7f98852_1002
   - xorg-libx11=1.7.2=h7f98852_0
@@ -84,48 +46,55 @@ dependencies:
   - xorg-xextproto=7.3.0=h7f98852_1002
   - xorg-xproto=7.0.31=h7f98852_1007
   - xz=5.2.5=h7b6447c_0
-  - yarl=1.6.3=py39h3811e60_2
-  - zipp=3.8.0=pyhd8ed1ab_0
   - zlib=1.2.11=h7f8727e_4
   - pip:
+    - absl-py==1.0.0
     - ale-py==0.7.5
     - autorom==0.4.2
     - autorom-accept-rom-license==0.4.2
     - box2d-py==2.3.5
+    - cachetools==5.0.0
     - cffi==1.15.0
-    - click==8.1.2
+    - charset-normalizer==2.0.12
     - cloudpickle==2.0.0
     - cycler==0.11.0
     - cython==0.29.28
     - dm-control==1.0.1
     - dm-env==1.5
     - dm-tree==0.1.6
-    - dmc2gym==1.0.0
     - fasteners==0.17.3
     - fonttools==4.32.0
     - future==0.18.2
     - glfw==2.5.3
+    - google-auth==2.6.6
+    - google-auth-oauthlib==0.4.6
     - grpcio==1.44.0
     - gym==0.21.0
     - gym-notices==0.0.6
     - h5py==3.6.0
+    - idna==3.3
     - imageio==2.16.2
+    - importlib-metadata==4.11.3
     - importlib-resources==5.7.1
     - install==1.3.5
     - kiwisolver==1.4.2
     - labmaze==1.0.5
     - lxml==4.8.0
+    - markdown==3.3.6
     - matplotlib==3.5.1
     - mujoco==2.1.4
     - mujoco-py==2.1.2.14
     - numpy==1.22.3
+    - oauthlib==3.2.0
     - opencv-python==4.5.5.64
     - packaging==21.3
     - pandas==1.4.2
     - pillow==9.1.0
     - protobuf==3.20.0
     - psutil==5.9.0
+    - pyasn1==0.4.8
     - pyasn1-modules==0.2.8
+    - pycparser==2.21
     - pygame==2.1.0
     - pyglet==1.3.2
     - pyopengl==3.1.6
@@ -133,10 +102,20 @@ dependencies:
     - python-dateutil==2.8.2
     - pytz==2022.1
     - pyyaml==5.4.1
+    - requests==2.27.1
+    - requests-oauthlib==1.3.1
+    - rsa==4.8
     - scipy==1.8.0
+    - six==1.16.0
     - stable-baselines3==1.5.0
+    - tensorboard==2.8.0
     - tensorboard-data-server==0.6.1
+    - tensorboard-plugin-wit==1.8.1
     - torch==1.11.0
     - torchvision==0.12.0
     - tqdm==4.64.0
+    - typing-extensions==4.1.1
+    - urllib3==1.26.9
+    - werkzeug==2.1.1
+    - zipp==3.8.0
 prefix: /home/dyung6/anaconda3/envs/7000

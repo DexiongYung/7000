@@ -9,16 +9,14 @@ from stable_baselines3.common.vec_env import VecEnvWrapper
 def get_env(cfg, num_workers, device):
     seed = cfg["train"]["seed"]
     num_frame_stack = cfg["num_frame_stack"]
+    venv = make_vec_env(SB3gym, n_envs=num_workers, seed=seed, env_kwargs={"cfg": cfg})
+
     return VecPyTorchFrameStack(
-        VecPyTorch(
-            venv=make_vec_env(
-                SB3gym, n_envs=num_workers, seed=seed, env_kwargs={"cfg": cfg}
-            ),
-            device=device,
-        ),
+        VecPyTorch(venv=venv, device=device,),
         nstack=num_frame_stack,
         device=device,
     )
+
 
 
 class VecPyTorch(VecEnvWrapper):
@@ -89,3 +87,4 @@ class VecPyTorchFrameStack(VecEnvWrapper):
 
     def close(self):
         self.venv.close()
+
