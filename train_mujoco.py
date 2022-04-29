@@ -8,12 +8,11 @@ from model import Policy
 from env import get_env
 from utils import get_config, get_logger
 import algorithm as algo
-from collections import deque
 from torch.utils.tensorboard import SummaryWriter
 
 
 def train(cfg):
-    seed = cfg['id']['seed']
+    seed = cfg['train']['seed']
     # Setup logger
     logger = get_logger(
         name=cfg["id"],
@@ -30,7 +29,7 @@ def train(cfg):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     tb_log_interval = cfg["train"]["tb_log_interval"]
     save_interval = cfg["train"]["save_interval"]
-    save_path = os.path.join("./checkpoints", cfg["algorithm"], cfg["id"], seed)
+    save_path = os.path.join("./checkpoints", cfg["algorithm"], cfg["id"], str(seed))
 
     envs = get_env(cfg=cfg, num_workers=num_workers, device=device)
 
@@ -52,11 +51,9 @@ def train(cfg):
     rollouts.obs[0].copy_(obs)
     rollouts.to(device)
 
-    episode_rewards = deque(maxlen=10)
-
     start = time.time()
     num_updates = int(cfg["train"]["num_env_steps"]) // num_steps // num_workers
-    logger.info(f"Number of updates is: {num_updates}")
+    logger.info(f"Number of updates is set to: {num_updates}")
 
     for j in range(num_updates):
         for step in range(num_steps):
@@ -75,10 +72,6 @@ def train(cfg):
 
             # Obser reward and next obs
             obs, reward, done, infos = envs.step(actions=action)
-
-            for info in infos:
-                if "episode" in info.keys():
-                    episode_rewards.append(info["episode"]["r"])
 
             # If done then clean the history of observations.
             masks = torch.FloatTensor([[0.0] if done_ else [1.0] for done_ in done])
@@ -133,16 +126,17 @@ def train(cfg):
                 os.path.join(save_path, "checkpoint.pt")
             )
 
-        if j % tb_log_interval == 0 and len(episode_rewards) > 1 or j == num_updates - 1:
-            total_num_steps = (j + 1) * num_workers * algo_params.num_steps
+        if j % tb_log_interval == 0 or j == num_updates - 1:
+            total_num_steps = (j + 1) * num_workers * num_steps
             end = time.time()
             writer.add_scalar(tag='FPS', scalar_value=int(total_num_steps / (end - start)), global_step=total_num_steps)
-            writer.add_scalar(tag="Mean Reward", scalar_value=np.mean(episode_rewards), global_step=total_num_steps)
-            writer.add_scalar(tag="Median Reward", scalar_value=np.median(episode_rewards), global_step=total_num_steps)
+            writer.add_scalar(tag="Mean Reward Of Last Rollout", scalar_value=torch.mean(rollouts.rewards), global_step=total_num_steps)
+            writer.add_scalar(tag="Median Reward Of Last Rollout", scalar_value=torch.median(rollouts.rewards), global_step=total_num_steps)
             writer.add_scalar(tag="Distribution Entropy At Num Step", scalar_value=dist_entropy, global_step=total_num_steps)
             writer.add_scalar(tag="Value Loss At Num Step", scalar_value=value_loss, global_step=total_num_steps)
             writer.add_scalar(tag="Actionn Loss At Num Step", scalar_value=action_loss, global_step=total_num_steps)
-
+    
+    logger.info(f'Done training at time: {end - start}')
     writer.close()
 
 
