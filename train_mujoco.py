@@ -1,6 +1,7 @@
 import os
 import json
 import time
+from turtle import st
 import torch
 import numpy as np
 from storage import RolloutStorage
@@ -54,6 +55,7 @@ def train(cfg):
     start = time.time()
     num_updates = int(cfg["train"]["num_env_steps"]) // num_steps // num_workers
     logger.info(f"Number of updates is set to: {num_updates}")
+    logger.info(f"Training Begins!")
 
     for j in range(num_updates):
         for step in range(num_steps):
@@ -129,12 +131,15 @@ def train(cfg):
         if j % tb_log_interval == 0 or j == num_updates - 1:
             total_num_steps = (j + 1) * num_workers * num_steps
             end = time.time()
+            mean_reward = torch.mean(rollouts.rewards)
+            median_reward = torch.median(rollouts.rewards)
             writer.add_scalar(tag='FPS', scalar_value=int(total_num_steps / (end - start)), global_step=total_num_steps)
-            writer.add_scalar(tag="Mean Reward Of Last Rollout", scalar_value=torch.mean(rollouts.rewards), global_step=total_num_steps)
-            writer.add_scalar(tag="Median Reward Of Last Rollout", scalar_value=torch.median(rollouts.rewards), global_step=total_num_steps)
+            writer.add_scalar(tag="Mean Reward Of Last Rollout", scalar_value=mean_reward, global_step=total_num_steps)
+            writer.add_scalar(tag="Median Reward Of Last Rollout", scalar_value=median_reward, global_step=total_num_steps)
             writer.add_scalar(tag="Distribution Entropy At Num Step", scalar_value=dist_entropy, global_step=total_num_steps)
             writer.add_scalar(tag="Value Loss At Num Step", scalar_value=value_loss, global_step=total_num_steps)
             writer.add_scalar(tag="Actionn Loss At Num Step", scalar_value=action_loss, global_step=total_num_steps)
+            logger.info(f'Step:{total_num_steps}/{num_updates*num_workers*num_steps}, mean: {mean_reward}, median: {median_reward}')
     
     logger.info(f'Done training at time: {end - start}')
     writer.close()
