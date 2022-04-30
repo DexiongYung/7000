@@ -138,7 +138,7 @@ def train(cfg):
             writer.add_scalar(tag="Median Reward Of Last Rollout", scalar_value=median_reward, global_step=total_num_steps)
             writer.add_scalar(tag="Distribution Entropy At Num Step", scalar_value=dist_entropy, global_step=total_num_steps)
             writer.add_scalar(tag="Value Loss At Num Step", scalar_value=value_loss, global_step=total_num_steps)
-            writer.add_scalar(tag="Actionn Loss At Num Step", scalar_value=action_loss, global_step=total_num_steps)
+            writer.add_scalar(tag="Action Loss At Num Step", scalar_value=action_loss, global_step=total_num_steps)
             logger.info(f'Step:{total_num_steps}/{num_updates*num_workers*num_steps}, mean reward: {mean_reward}, median reward: {median_reward}')
     
     logger.info(f'Total Time To Complete: {end - start}')

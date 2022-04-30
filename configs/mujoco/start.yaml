@@ -1,4 +1,4 @@
-id: start
+id: test
 task: Ant-v3
 num_frame_stack: 4
 screen_height: 100
@@ -11,7 +11,7 @@ train:
   seed: 1234
   num_workers: 8
   num_steps: 5
-  num_env_steps: 1000000 # 1000000000
+  num_env_steps: 1000000000
   compute_returns:
     gae_lambda: 0.95
     gamma: 0.99
