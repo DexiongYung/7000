@@ -5,17 +5,10 @@ import argparse
 import logging
 
 
-def get_logger(name: str, seed: int, add_date: bool):
+def get_logger(name: str, seed: int):
     logger = logging.getLogger(name)
 
-    if add_date:
-        ts = str(datetime.datetime.now()).split(".")[0].replace(" ", "_")
-        ts = ts.replace(":", "_").replace("-", "_")
-        ts = "_" + ts
-    else:
-        ts = ""
-
-    file_path = f"./logging/{name}_{seed}{ts}.log"
+    file_path = f"./logging/{name}_{seed}.log"
     hdlr = logging.FileHandler(file_path)
     formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
     hdlr.setFormatter(formatter)

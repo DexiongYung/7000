@@ -1,0 +1,6 @@
+2022-04-30 01:49:20,435 INFO {'id': 'clean', 'task': 'Ant-v3', 'num_frame_stack': 8, 'screen_height': 100, 'screen_width': 100, 'algorithm': 'PPO', 'device_id': 2, 'train': {'save_interval': 500, 'tb_log_interval': 500, 'seed': 1234, 'num_workers': 8, 'num_steps': 50, 'num_env_steps': 1000000, 'compute_returns': {'gae_lambda': 0.95, 'gamma': 0.99}, 'algorithm_params': {'clip_param': 0.2, 'ppo_epoch': 4, 'num_mini_batch': 4, 'value_loss_coef': 0.5, 'entropy_coef': 0.01, 'lr': 0.0007, 'eps': 1e-05, 'max_grad_norm': 0.5, 'use_clipped_value_loss': True}}}
+2022-04-30 01:49:26,014 INFO Number of updates is set to: 2500
+2022-04-30 01:49:26,014 INFO Training Begins!
+2022-04-30 01:49:27,838 INFO num update: 0. Saving config.yaml...
+2022-04-30 01:49:27,838 INFO num update: 0. Saving checkpoint...
+2022-04-30 01:49:27,868 INFO Step:400/1000000, mean reward: -113.596948, median reward: -113.596948

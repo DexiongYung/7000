@@ -1,17 +1,17 @@
-id: test
+id: clean
 task: Ant-v3
-num_frame_stack: 4
+num_frame_stack: 8
 screen_height: 100
 screen_width: 100
 algorithm: PPO
 device_id: 2
 train:
-  save_interval: 10 # 5000
-  tb_log_interval: 5 # 2500
+  save_interval: 500
+  tb_log_interval: 500
   seed: 1234
   num_workers: 8
-  num_steps: 5
-  num_env_steps: 1000000000
+  num_steps: 50
+  num_env_steps: 1000000
   compute_returns:
     gae_lambda: 0.95
     gamma: 0.99
@@ -25,5 +25,3 @@ train:
     eps: 0.00001
     max_grad_norm: 0.5
     use_clipped_value_loss: True
-  logs:
-    add_date: False

@@ -1,9 +1,10 @@
 import os
 import json
 import time
-from turtle import st
+import datetime
 import torch
 import numpy as np
+from collections import deque
 from storage import RolloutStorage
 from model import Policy
 from env import get_env
@@ -18,7 +19,6 @@ def train(cfg):
     logger = get_logger(
         name=cfg["id"],
         seed=seed,
-        add_date=cfg["train"]["logs"]["add_date"],
     )
     logger.info(cfg)
     writer = SummaryWriter(log_dir=os.path.join("./tb_logs", cfg["algorithm"], cfg["id"]))
@@ -52,6 +52,8 @@ def train(cfg):
     rollouts.obs[0].copy_(obs)
     rollouts.to(device)
 
+    episode_rewards = deque(maxlen=10)
+    
     start = time.time()
     num_updates = int(cfg["train"]["num_env_steps"]) // num_steps // num_workers
     logger.info(f"Number of updates is set to: {num_updates}")
@@ -74,6 +76,10 @@ def train(cfg):
 
             # Obser reward and next obs
             obs, reward, done, infos = envs.step(actions=action)
+
+            for info in infos:
+                if 'episode' in info.keys():
+                    episode_rewards.append(info['episode']['r'])
 
             # If done then clean the history of observations.
             masks = torch.FloatTensor([[0.0] if done_ else [1.0] for done_ in done])
@@ -131,17 +137,17 @@ def train(cfg):
         if j % tb_log_interval == 0 or j == num_updates - 1:
             total_num_steps = (j + 1) * num_workers * num_steps
             end = time.time()
-            mean_reward = torch.mean(rollouts.rewards)
-            median_reward = torch.median(rollouts.rewards)
+            mean_reward = np.mean(episode_rewards).item()
+            median_reward = np.median(episode_rewards).item()
             writer.add_scalar(tag='FPS', scalar_value=int(total_num_steps / (end - start)), global_step=total_num_steps)
-            writer.add_scalar(tag="Mean Reward Of Last Rollout", scalar_value=mean_reward, global_step=total_num_steps)
-            writer.add_scalar(tag="Median Reward Of Last Rollout", scalar_value=median_reward, global_step=total_num_steps)
+            writer.add_scalar(tag="Mean Reward Of Episode Rewards", scalar_value=mean_reward, global_step=total_num_steps)
+            writer.add_scalar(tag="Median Reward Of Episode Rewards", scalar_value=median_reward, global_step=total_num_steps)
             writer.add_scalar(tag="Distribution Entropy At Num Step", scalar_value=dist_entropy, global_step=total_num_steps)
             writer.add_scalar(tag="Value Loss At Num Step", scalar_value=value_loss, global_step=total_num_steps)
             writer.add_scalar(tag="Action Loss At Num Step", scalar_value=action_loss, global_step=total_num_steps)
-            logger.info(f'Step:{total_num_steps}/{num_updates*num_workers*num_steps}, mean reward: {mean_reward}, median reward: {median_reward}')
+            logger.info(f'Step:{total_num_steps}/{int(cfg["train"]["num_env_steps"])}, mean reward: {mean_reward}, median reward: {median_reward}')
     
-    logger.info(f'Total Time To Complete: {end - start}')
+    logger.info(f'Total Time To Complete: {str(datetime.timedelta(seconds=end - start))}')
     writer.close()
 
 
